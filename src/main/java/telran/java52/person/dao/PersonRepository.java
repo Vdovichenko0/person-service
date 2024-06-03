@@ -14,10 +14,10 @@ import telran.java52.person.model.Person;
 public interface PersonRepository extends JpaRepository<Person, Integer> {
   //построй запрос чтобы вернулся курсор Stream
 //  @Query(value = "", nativeQuery = true)
-  @Query("select p from Person p where p.name=?1")
+//  @Query("select p from Person p where p.name=?1")
   Stream<Person> findByNameIgnoreCase(String name);
 
-  @Query("select p from Person p where p.address.city=:cityName")
+//  @Query("select p from Person p where p.address.city=:cityName")
   Stream<Person> findByAddressCityIgnoreCase(@Param("cityName") String city);
 
   Stream<Person> findByBirthDateBetween(LocalDate from, LocalDate to);
