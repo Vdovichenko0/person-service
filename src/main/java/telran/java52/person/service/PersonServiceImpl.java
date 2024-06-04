@@ -29,7 +29,7 @@ public class PersonServiceImpl implements PersonService, CommandLineRunner {
 	// и блокирует изменения других операций, гарантируя согласованность и
 	// корректность данных.
 	//сэйф делать не надо при коммите он сам все сохраняет (если какие то изменения)
-	@Transactional
+	@Transactional // удерживает соединение до завершения работы метода пока он работает все остальные ждут
 	@Override
 	public Boolean addPerson(PersonDto personDto) {
 		if (personRepository.existsById(personDto.getId())) {
@@ -58,6 +58,9 @@ public class PersonServiceImpl implements PersonService, CommandLineRunner {
 	public PersonDto updatePersonName(Integer id, String name) {
 		Person person = personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException());
 		person.setName(name);
+//		 приработе с спрингом и sql не обязательно делать save если есть аннотация @Transactional
+//		так как spring+hybernate делают commit после завершения каждой transactional операции
+//		и если по такому ID что-то есть и происходит изменение то данные сохнаняются автоматически
 		return modelMapper.map(person, PersonDto.class);
 	}
 
@@ -69,7 +72,7 @@ public class PersonServiceImpl implements PersonService, CommandLineRunner {
 		return modelMapper.map(person, PersonDto.class);
 	}
 
-	@Transactional(readOnly = true)
+	@Transactional(readOnly = true) // только чтение, не удерживает соединение и возможно выполнять несколько readOnly запросов одновременно 
 	@Override
 	public PersonDto[] findPersonsByCity(String city) {
 		return personRepository.findByAddressCityIgnoreCase(city)

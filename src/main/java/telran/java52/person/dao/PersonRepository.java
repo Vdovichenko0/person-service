@@ -15,7 +15,7 @@ public interface PersonRepository extends JpaRepository<Person, Integer> {
   //построй запрос чтобы вернулся курсор Stream
 //  @Query(value = "", nativeQuery = true)
 //  @Query("select p from Person p where p.name=?1")
-  Stream<Person> findByNameIgnoreCase(String name);
+  Stream<Person> findByNameIgnoreCase(String name); // <- JPQL, лучше использовать JPQL - обьектно ориентированный язык sql запросов
 
 //  @Query("select p from Person p where p.address.city=:cityName")
   Stream<Person> findByAddressCityIgnoreCase(@Param("cityName") String city);
