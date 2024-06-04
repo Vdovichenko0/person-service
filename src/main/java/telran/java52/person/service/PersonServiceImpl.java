@@ -39,6 +39,7 @@ public class PersonServiceImpl implements PersonService, CommandLineRunner {
 		return true;
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public PersonDto findPersonById(Integer id) {
 		Person person = personRepository.findById(id).orElseThrow(PersonNotFoundException::new);
@@ -103,7 +104,6 @@ public class PersonServiceImpl implements PersonService, CommandLineRunner {
 		return personRepository.getCitiesPopulation();
 	}
 
-	@Transactional
 	@Override
 	public void run(String... args) throws Exception {
 		if(personRepository.count() == 0) {
