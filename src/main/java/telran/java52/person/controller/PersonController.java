@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import telran.java52.dto.AddressDto;
-import telran.java52.dto.CityPopulationDto;
-import telran.java52.dto.PersonDto;
+import telran.java52.person.dto.AddressDto;
+import telran.java52.person.dto.CityPopulationDto;
+import telran.java52.person.dto.PersonDto;
 import telran.java52.person.service.PersonService;
 
 

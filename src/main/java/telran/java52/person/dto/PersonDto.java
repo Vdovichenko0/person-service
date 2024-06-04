@@ -1,4 +1,4 @@
-package telran.java52.dto;
+package telran.java52.person.dto;
 
 import java.time.LocalDate;
 

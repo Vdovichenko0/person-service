@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import telran.java52.dto.AddressDto;
-import telran.java52.dto.CityPopulationDto;
-import telran.java52.dto.PersonDto;
 import telran.java52.person.dao.PersonRepository;
+import telran.java52.person.dto.AddressDto;
+import telran.java52.person.dto.CityPopulationDto;
+import telran.java52.person.dto.PersonDto;
 import telran.java52.person.exceptions.PersonNotFoundException;
 import telran.java52.person.model.Address;
 import telran.java52.person.model.Child;
