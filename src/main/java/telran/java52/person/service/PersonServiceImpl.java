@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import telran.java52.dto.AddressDto;
-import telran.java52.dto.CityPopulationDto;
-import telran.java52.dto.PersonDto;
 import telran.java52.person.dao.PersonRepository;
+import telran.java52.person.dto.AddressDto;
+import telran.java52.person.dto.CityPopulationDto;
+import telran.java52.person.dto.PersonDto;
 import telran.java52.person.exceptions.PersonNotFoundException;
 import telran.java52.person.model.Address;
 import telran.java52.person.model.Person;
@@ -21,10 +21,6 @@ public class PersonServiceImpl implements PersonService {
 	final PersonRepository personRepository;
 	final ModelMapper modelMapper;
 
-	// В этот момент, пока проводится операция над сущностью Person, транзакция
-	// обеспечивает целостность данных
-	// и блокирует изменения других операций, гарантируя согласованность и
-	// корректность данных.
 	@Transactional
 	@Override
 	public Boolean addPerson(PersonDto personDto) {
@@ -54,7 +50,6 @@ public class PersonServiceImpl implements PersonService {
 	public PersonDto updatePersonName(Integer id, String name) {
 		Person person = personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException());
 		person.setName(name);
-		personRepository.save(person);
 		return modelMapper.map(person, PersonDto.class);
 	}
 
@@ -63,34 +58,38 @@ public class PersonServiceImpl implements PersonService {
 	public PersonDto updatePersonAddress(Integer id, AddressDto addressDto) {
 		Person person = personRepository.findById(id).orElseThrow(() -> new PersonNotFoundException());
 		person.setAddress(modelMapper.map(addressDto, Address.class));
-		personRepository.save(person);
 		return modelMapper.map(person, PersonDto.class);
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public PersonDto[] findPersonsByCity(String city) {
-		return personRepository.findByAddressCityIgnoreCase(city).stream().map(p -> modelMapper.map(p, PersonDto.class))
+		return personRepository.findByAddressCityIgnoreCase(city)
+				.map(p -> modelMapper.map(p, PersonDto.class))
 				.toArray(PersonDto[]::new);
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public PersonDto[] findPersonsByName(String name) {
-		return personRepository.findByNameIgnoreCase(name).stream().map(p -> modelMapper.map(p, PersonDto.class))
+		return personRepository.findByNameIgnoreCase(name)
+				.map(p -> modelMapper.map(p, PersonDto.class))
 				.toArray(PersonDto[]::new);
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public PersonDto[] findPersonsBetweenAge(Integer minAge, Integer maxAge) {
 		LocalDate from = LocalDate.now().minusYears(maxAge);
 		LocalDate to = LocalDate.now().minusYears(minAge);
-		return personRepository.findByBirthDateBetween(from, to).stream().map(p -> modelMapper.map(p, PersonDto.class))
+		return personRepository.findByBirthDateBetween(from, to)
+				.map(p -> modelMapper.map(p, PersonDto.class))
 				.toArray(PersonDto[]::new);
 	}
 
 	@Override
 	public Iterable<CityPopulationDto> getCitiesPopulation() {
-		// TODO Auto-generated method stub
-		return null;
+		return personRepository.getCitiesPopulation();
 	}
 
 }

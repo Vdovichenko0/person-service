@@ -1,4 +1,4 @@
-package telran.java52.dto;
+package telran.java52.person.dto;
 
 import lombok.Getter;
 
@@ -7,4 +7,5 @@ public class AddressDto {
 	String city;
 	String street;
 	Integer building;
+
 }
