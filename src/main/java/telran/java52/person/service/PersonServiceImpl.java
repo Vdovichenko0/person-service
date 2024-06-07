@@ -125,4 +125,26 @@ public class PersonServiceImpl implements PersonService, CommandLineRunner {
 		
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public PersonDto[] findAllChildren() {
+	    return personRepository.findAll()
+	            .stream()
+	            .filter(person -> person instanceof Child)
+	            .map(person -> mapper.mapToDto(person))
+	            .toArray(PersonDto[]::new);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public PersonDto[] findEmployeesBySalary(int minSalary, int maxSalary) {
+	    return personRepository.findAll()
+	            .stream()
+	            .filter(person -> person instanceof Employee)
+	            .map(person -> (Employee) person)
+	            .filter(employee -> employee.getSalary() >= minSalary && employee.getSalary() <= maxSalary)
+	            .map(employee -> mapper.mapToDto(employee))
+	            .toArray(PersonDto[]::new);
+	}
+
 }
